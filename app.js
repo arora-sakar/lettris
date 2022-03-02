@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isSquareClickValid(this))
       return;
     this.selected = true;
-    this.style.border = "2.5px inset";
+    this.style.border = "inset";
     WordDisplay.innerText = WordDisplay.innerText + this.innerText;
     if (SquaresSelected == null)
       SquaresSelected = new Array();
@@ -169,8 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //console.log('Y:' + (LetterBox.posX+c));
         square = square_grid[LetterBox.posY+r][LetterBox.posX+c];
         square.innerText = LetterBox.content[r][c];
-        square.style.padding = "0px";
-        square.style.border = "2.5px outset";
+        square.style.border = "outset";
       }
     }
   }
@@ -184,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
         square = square_grid[LetterBox.posY+r][LetterBox.posX+c];
         square.innerText = '';
         square.style.border = "";
-        square.style.padding = "2.5px";
       }
     }
   }
@@ -238,12 +236,10 @@ document.addEventListener('DOMContentLoaded', () => {
         dropUpperSquares(square_grid[r-1][c]);
       square_grid[r][c].innerText = square_grid[r-1][c].innerText;
       square_grid[r][c].style.border = square_grid[r-1][c].style.border;
-      square_grid[r][c].style.padding = square_grid[r-1][c].style.padding;
       r--;
     }
     square_grid[r][c].innerText = '';
     square_grid[r][c].style.border = '';
-    square_grid[r][c].style.padding = "2.5px";
     square.selected = false;
   }
 
@@ -262,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       for (i = 0; i < SquaresSelected.length; i++) {
         SquaresSelected[i].selected = false;
-        SquaresSelected[i].style.border = "2.5px outset";
+        SquaresSelected[i].style.border = "outset";
       }
     }
     SquaresSelected = null;
@@ -275,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     for (i = 0; i < SquaresSelected.length; i++) {
       SquaresSelected[i].selected = false;
-      SquaresSelected[i].style.border = "2.5px outset";
+      SquaresSelected[i].style.border = "outset";
     }
     SquaresSelected = null;
     WordDisplay.innerText = '';

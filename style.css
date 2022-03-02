@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 #start-button {
   position:relative;
   margin-left: 25%;
@@ -19,11 +23,9 @@
 }
 
 .grid div {
-  font-family: Papyrus;
-  height: 20px;
-  width: 20px;
-  margin: 0px;
-  padding: 2.5px;
+  height: 25px;
+  width: 25px;
+  text-align: center;
 }
 
 .container {
@@ -34,6 +36,7 @@
 
 #worddisplay {
   background-color: #ebf1f7;
+  border: 1px solid;
 }
 
 #submit-button {
