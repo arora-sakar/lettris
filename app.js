@@ -92,9 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
       SquaresSelected = new Array();
     SquaresSelected.push(this);
     if (isValidWord(WordDisplay.innerText))
-      submitBtn.style.backgroundColor = "green";
+      submitBtn.style.backgroundColor = '#179c43';
     else
-      submitBtn.style.backgroundColor = "yellow";
+      submitBtn.style.backgroundColor = '#c9c938';
   }
 
   function pickVowel() {
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     SquaresSelected = null;
     WordDisplay.innerText = '';
-    submitBtn.style.backgroundColor = "yellow";
+    submitBtn.style.backgroundColor = '#c9c938';
   })
 
   clearBtn.addEventListener('click', () => {

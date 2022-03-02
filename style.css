@@ -1,5 +1,13 @@
-.container {
+#start-button {
+  position:relative;
+  margin-left: 25%;
+  background-color: #32a899;
+}
+
+.grid-container {
+  margin-left: 25%;
   display: flex;
+  position: relative;
 }
 
 .grid {
@@ -7,7 +15,7 @@
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  background-color: rgb(250, 250, 250);
+  background-color: #ebf1f7;
 }
 
 .grid div {
@@ -16,30 +24,22 @@
   width: 20px;
   margin: 0px;
   padding: 2.5px;
-} 
+}
+
+.container {
+  position:relative;
+  display: flex;
+  margin-left: 25%;
+}
 
 #worddisplay {
-  position:absolute;
-  top: 440px;
-  left: 40px;
-  height: 20px;
-  width: 160px;
-  background-color: rgb(250, 250, 250);
+  background-color: #ebf1f7;
 }
 
 #submit-button {
-  position:absolute;
-  top: 440px;
-  left: 220px;
-  height: 20px;
-  width: 40px;
-  background-color: yellow;
+  background-color: #c9c938;
 }
 
 #clear-button {
-  position:absolute;
-  top: 440px;
-  height: 20px;
-  width: 30px;
-  background-color: rgb(206, 20, 20);
+  background-color: #9c2217;
 }
