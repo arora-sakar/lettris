@@ -1,4 +1,5 @@
 let WordList = null;
+let Score = 0;
 document.addEventListener('DOMContentLoaded', () => {
   let LetterBox = null;
   let gameOver = false;
@@ -79,6 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
+  function getWordPoints(wordLength) {
+    return wordLength;
+  }
+
   function squareClickAction(evt) {
     //console.log("Square clicked " + this.innerText + " (" + this.r + "," + this.c + ")");
     if (this.selected == true)
@@ -91,10 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (SquaresSelected == null)
       SquaresSelected = new Array();
     SquaresSelected.push(this);
-    if (isValidWord(WordDisplay.innerText))
+    if (isValidWord(WordDisplay.innerText)) {
       submitBtn.style.backgroundColor = '#179c43';
-    else
+      submitBtn.innerText = Score.toString() + '+' + getWordPoints(WordDisplay.innerText.length).toString();
+    }
+    else {
       submitBtn.style.backgroundColor = '#c9c938';
+      submitBtn.innerText = Score.toString() + '+0';
+    }
   }
 
   function pickVowel() {
@@ -145,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (c = 0; c < LetterBox.W; c++) {
       square = square_grid[LetterBox.posY + LetterBox.H][LetterBox.posX+c];
       if (square.innerText != '') {
-        console.log(`${square.innerText}(${square.r},${square.c})`);
+        //console.log(`${square.innerText}(${square.r},${square.c})`);
         settled = true;
         break;
       }
@@ -255,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
       for (i = 0; i < SquaresSelected.length; i++) {
         dropUpperSquares(SquaresSelected[i]);
       }
+      Score += getWordPoints(WordDisplay.innerText.length);
     } else {
       for (i = 0; i < SquaresSelected.length; i++) {
         SquaresSelected[i].selected = false;
@@ -264,6 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
     SquaresSelected = null;
     WordDisplay.innerText = '';
     submitBtn.style.backgroundColor = '#c9c938';
+    submitBtn.innerText = Score.toString();
   })
 
   clearBtn.addEventListener('click', () => {
