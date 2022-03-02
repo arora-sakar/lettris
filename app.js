@@ -1,8 +1,8 @@
-let WordList = null;
-let Score = 0;
 document.addEventListener('DOMContentLoaded', () => {
+  let WordList = null;
+  let Score = 0;
   let LetterBox = null;
-  let gameOver = false;
+  let GameOver = false;
   const LetterBoxSize = 4;
   const LetterBoxShapes = [
                             [
@@ -161,9 +161,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (settled && LetterBox.posY == 0) {
       clearInterval(timerid);
-      gameOver = true;
+      GameOver = true;
       LetterBox = null;
       alert("Game Over!!");
+      startBtn.innerText = 'Restart';
     }
     return settled;
   }
@@ -198,13 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function moveLetterBoxDown() {
     if (isletterBoxSettled()) {
-      if (!gameOver)
+      if (!GameOver)
         createLetterBox();
     } else {
       eraseLetterBox();
       LetterBox.posY++;
     }
-    if (!gameOver)
+    if (!GameOver)
       drawLetterBox();
   }
   
@@ -220,7 +221,26 @@ document.addEventListener('DOMContentLoaded', () => {
     //square_array[sq_idx].innerText = alphabet[Math.floor(Math.random() * 26)];
   }
 
+  function cleanGameState() {
+    for (i = 0; i < square_grid.length; i++) {
+      for (j = 0; j < square_grid[i].length; j++) {
+        square_grid[i][j].innerText = '';
+        square_grid[i][j].style.border = 'none';
+      }
+    }
+    clearInterval(timerid);
+    timerid = null;
+    GameOver = false;
+    LetterBox = null;
+    WordDisplay.innerText = '';
+    Score = 0;
+    submitBtn.innerText = '0';
+    startBtn.innerText = 'Start/Pause';
+  }
+
   startBtn.addEventListener('click', () => {
+    if (GameOver)
+      cleanGameState();
     if (LetterBox == null)
       createLetterBox();
     if (timerid) {
