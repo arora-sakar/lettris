@@ -3,33 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let Score = 0;
   let LetterBox = null;
   let GameOver = false;
-  const LetterBoxSize = 4;
-  const LetterBoxShapes = [
-                            [
-                              ['l', 'l', 'l', 'l'],
-                              ['', '', '', ''],
-                              ['', '', '', ''],
-                              ['', '', '', '']
-                            ],
-                            [
-                              ['l', '', '', ''],
-                              ['l', '', '', ''],
-                              ['l', '', '', ''],
-                              ['l', '', '', '']
-                            ],
-                            [
-                              ['l', 'l', '', ''],
-                              ['l', 'l', '', ''],
-                              ['', '', '', ''],
-                              ['', '', '', '']
-                            ]
-                          ];
+  const LetterBoxSize = 10;
+  const NumRows = 16;
+  const NumCols = 10;
   const WordDisplay = document.querySelector('#worddisplay');
   WordDisplay.innerText = '';
-  const [grid_width, grid_height] = get_grid_shape();
-  const grid = document.querySelector('.grid');
-  grid.style.width = grid_width.toString() + 'px';
-  grid.style.height = grid_height.toString() + 'px';
+  const grid = document.querySelector('.grid-container');
   const startBtn = document.querySelector('#start-button');
   const submitBtn = document.querySelector('#submit-button');
   const clearBtn = document.querySelector('#clear-button');
@@ -47,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       square.c = j;
       square.selected = false;
       square_row.push(square);
-      grid.appendChild(square); 
+      grid.appendChild(square);
     }
     square_grid.push(square_row);
     const url = "https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt"
@@ -65,28 +44,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function isSquareClickValid(square) {
-    if (square.innerText == '')
+    if (square.innerText === '')
       return false;
-    for (r = 0; r < LetterBox.H; r++) {
-      for (c = 0; c < LetterBox.W; c++) {
-        //assert -> LetterBoxContent[r][c] != ''
-        //console.log('X:' + (LetterBox.posY+r));
-        //console.log('Y:' + (LetterBox.posX+c));
-        if (square.r == (LetterBox.posY + r) && square.c == (LetterBox.posX + c)) {
-          return false;
-        }
-      }
+    for (i = 0; i < LetterBoxSize; i++) {
+      if (square.r === LetterBox[i].posY && square.c === i)
+        return false;
     }
     return true;
   }
 
   function getWordPoints(wordLength) {
-    return wordLength;
+    return wordLength * (wordLength-1)/2;
   }
 
   function squareClickAction(evt) {
     //console.log("Square clicked " + this.innerText + " (" + this.r + "," + this.c + ")");
-    if (this.selected == true)
+    if (GameOver || this.selected == true)
       return;
     if (!isSquareClickValid(this))
       return;
@@ -113,102 +86,99 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function createLetterBox() {
-    let idx = Math.floor(Math.random() * LetterBoxShapes.length);
-    let LetterBoxFilled = new Array();
-    let maxWidth = 0;
-    let maxHeight = 0;
-    for (r = 0; r < LetterBoxSize; r++) {
-      LetterBoxRow = new Array();
-      for (c = 0; c < LetterBoxSize; c++) {
-        if (LetterBoxShapes[idx][r][c] == 'l') {
-          if (maxWidth < c+1)
-            maxWidth = c+1;
-          if (maxHeight < r+1)
-            maxHeight = r+1;
-          if (pickVowel()) {
-            let idx = Math.floor(Math.random() * vowels.length);
-            //console.log('vowels:' + idx.toString());
-            LetterBoxRow.push(vowels[idx]);
-            //LetterBoxShape[i][j] = vowels[idx];//Math.floor(Math.random() * vowels.length)];
-          }
-          else {
-            let idx = Math.floor(Math.random() * consonants.length);
-            //console.log('consonants:' + idx.toString());
-            LetterBoxRow.push(consonants[idx]);
-            //LetterBoxShape[i][j] = consonants[idx];//Math.floor(Math.random() * consonants.length)];
-          }
+    LetterBox = new Array();
+    let l = null;
+    for (i = 0; i < LetterBoxSize; i++) {
+      square = square_grid[0][i];
+      if (square.innerText === '') {
+        if (pickVowel()) {
+          let idx = Math.floor(Math.random() * vowels.length);
+          //console.log('vowels:' + idx.toString());
+          //LetterBoxRow.push(vowels[idx]);
+          //LetterBoxShape[i][j] = vowels[idx];//Math.floor(Math.random() * vowels.length)];
+          l = {letter: vowels[idx], posY: 0};
         }
+        else {
+          let idx = Math.floor(Math.random() * consonants.length);
+          //console.log('consonants:' + idx.toString());
+          //LetterBoxRow.push(consonants[idx]);
+          //LetterBoxShape[i][j] = consonants[idx];//Math.floor(Math.random() * consonants.length)];
+          l = {letter: consonants[idx], posY: 0};
+        }
+        LetterBox.push(l);
       }
-      LetterBoxFilled.push(LetterBoxRow);
+      else {
+        GameOver = true;
+        break;
+      }
     }
-    curX = Math.floor(Math.random() * (11 - maxWidth)); //TODO: Why 11?
-    LetterBox = {content: LetterBoxFilled, posX: curX, posY: 0, H: maxHeight, W: maxWidth};
+    if (GameOver) {
+      clearInterval(timerid);
+      LetterBox = null;
+      alert("Game Over!!");
+      startBtn.innerText = 'Restart';
+    }
   }
 
   function isletterBoxSettled() {
     if (LetterBox == null)
       return true;
-    if ((LetterBox.posY + LetterBox.H - 1) >= 15)
-      return true;
-    let settled = false;
-    for (c = 0; c < LetterBox.W; c++) {
-      square = square_grid[LetterBox.posY + LetterBox.H][LetterBox.posX+c];
-      if (square.innerText != '') {
-        //console.log(`${square.innerText}(${square.r},${square.c})`);
-        settled = true;
-        break;
+
+    for (i = 0; i < LetterBoxSize; i++) {
+      if (LetterBox[i].posY < 15) {
+        square = square_grid[LetterBox[i].posY+1][i];
+        if (square.innerText === '')
+          return false;
       }
     }
-    if (settled && LetterBox.posY == 0) {
-      clearInterval(timerid);
-      GameOver = true;
-      LetterBox = null;
-      alert("Game Over!!");
-      startBtn.innerText = 'Restart';
-    }
-    return settled;
+    return true;
   }
 
   function drawLetterBox() {
     if (LetterBox == null)
       return;
-    for (r = 0; r < LetterBox.H; r++) {
-      for (c = 0; c < LetterBox.W; c++) {
-        //assert -> LetterBoxContent[r][c] != ''
-        //console.log('X:' + (LetterBox.posY+r));
-        //console.log('Y:' + (LetterBox.posX+c));
-        square = square_grid[LetterBox.posY+r][LetterBox.posX+c];
-        square.innerText = LetterBox.content[r][c];
-        square.style.border = "outset";
-      }
+    for (i = 0; i < LetterBoxSize; i++) {
+      square = square_grid[LetterBox[i].posY][i];
+      square.innerText = LetterBox[i].letter;
+      square.style.border = "outset";
     }
   }
 
   function eraseLetterBox() {
     if (LetterBox == null)
       return;
-    for (r = 0; r < LetterBox.H; r++) {
-      for (c = 0; c < LetterBox.W; c++) {
-        //assert -> LetterBoxContent[r][c] != ''
-        square = square_grid[LetterBox.posY+r][LetterBox.posX+c];
-        square.innerText = '';
-        square.style.border = "";
-      }
+    for (i = 0; i < LetterBoxSize; i++) {
+      square = square_grid[LetterBox[i].posY][i];
+      square.innerText = '';
+      square.style.border = "none";
     }
+  }
+
+  function isLetterSettled(r, c) {
+    if (r >= 15)
+      return true;
+
+    if (square_grid[r+1][c].innerText === '')
+      return false;
+
+    return true;
   }
 
   function moveLetterBoxDown() {
     if (isletterBoxSettled()) {
-      if (!GameOver)
         createLetterBox();
     } else {
       eraseLetterBox();
-      LetterBox.posY++;
+      for (i = 0; i < LetterBoxSize; i++) {
+        if (!isLetterSettled(LetterBox[i].posY, i)) {
+          LetterBox[i].posY++;
+        }
+      }
     }
     if (!GameOver)
       drawLetterBox();
   }
-  
+
   function gameplay() {
     // Game play actions - order TBD
     //- move floating letter bar(s) down
@@ -308,49 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
     WordDisplay.innerText = '';
   })
 
-  function moveLetterBoxLeft() {
-    if (LetterBox.posX <= 0)
-      return;
-    let isLeftBlocked = false;
-    for (r = 0; r < LetterBox.H; r++) {
-      square = square_grid[LetterBox.posY + r][LetterBox.posX - 1];
-      if (square.innerText != '') {
-        isLeftBlocked = true;
-        break;
-      }
-    }
-    if (!isLeftBlocked) {
-      eraseLetterBox();
-      LetterBox.posX--;
-      drawLetterBox();
-    }
-  }
-
-  function moveLetterBoxRight() {
-    if (LetterBox.posX + LetterBox.W >=  10)
-      return;
-    let isRightBlocked = false;
-    for (r = 0; r < LetterBox.H; r++) {
-      square = square_grid[LetterBox.posY + r][LetterBox.posX + LetterBox.W];
-      if (square.innerText != '') {
-        isRightBlocked = true;
-        break;
-      }
-    }
-    if (!isRightBlocked) {
-      eraseLetterBox();
-      LetterBox.posX++;
-      drawLetterBox();
-    }
-  }
-
   //assign functions to keyCodes
   function control(e) {
-    if(e.keyCode === 37) {
-      moveLetterBoxLeft();
-    } else if (e.keyCode === 39) {
-      moveLetterBoxRight();
-    } else if (e.keyCode === 40) {
+    if (e.keyCode === 40) {
       moveLetterBoxDown();
     }
   }

@@ -3,18 +3,10 @@
 }
 
 #start-button {
-  position:relative;
-  margin-left: 25%;
   background-color: #32a899;
 }
 
 .grid-container {
-  margin-left: 25%;
-  display: flex;
-  position: relative;
-}
-
-.grid {
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -22,16 +14,13 @@
   background-color: #ebf1f7;
 }
 
-.grid div {
-  height: 25px;
-  width: 25px;
+.grid-container div {
   text-align: center;
 }
 
-.container {
+.container-top, .container-bottom {
   position:relative;
   display: flex;
-  margin-left: 25%;
 }
 
 #worddisplay {
@@ -45,4 +34,75 @@
 
 #clear-button {
   background-color: #9c2217;
+}
+
+@media screen and (min-width: 481px) and (orientation: portrait) {
+  #start-button {
+    margin: auto;
+    width: 20vw;
+  }
+
+  .grid-container {
+    margin: auto;
+    width: 60vw;
+    height: 96vw;
+  }
+
+  .grid-container div {
+    height: 6vw;
+    width: 6vw;
+    font-size: 4vw;
+  }
+
+  .container-top, .container-bottom {
+    margin: auto;
+    width: 60vw;
+  }
+}
+
+@media screen and (max-width: 480px) and (orientation: portrait) {
+  #start-button {
+    margin: 0;
+    width: 30vw;
+  }
+
+  .grid-container {
+    margin: 0;
+    width: 100vw;
+    height: 160vw;
+  }
+
+  .grid-container div {
+    height: 10vw;
+    width: 10vw;
+    font-size: 6vw;
+  }
+
+  .container-top, .container-bottom {
+    width: 100vw;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  #start-button {
+    margin: auto;
+    width: 20vh;
+  }
+
+  .grid-container {
+    margin: auto;
+    width: 50vh;
+    height: 80vh;
+  }
+
+  .grid-container div {
+    height: 5vh;
+    width: 5vh;
+    font-size: 3vh;
+  }
+
+  .container-top, .container-bottom {
+    margin: auto;
+    width: 50vh;
+  }
 }
