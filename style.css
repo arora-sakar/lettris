@@ -62,24 +62,25 @@
 
 @media screen and (max-width: 480px) and (orientation: portrait) {
   #start-button {
-    margin: 0;
+    margin: auto;
     width: 30vw;
   }
 
   .grid-container {
-    margin: 0;
-    width: 100vw;
-    height: 160vw;
+    margin: auto;
+    width: 90vw;
+    height: 144vw;
   }
 
   .grid-container div {
-    height: 10vw;
-    width: 10vw;
+    height: 9vw;
+    width: 9vw;
     font-size: 6vw;
   }
 
   .container-top, .container-bottom {
-    width: 100vw;
+    margin:auto;
+    width: 90vw;
   }
 }
 
