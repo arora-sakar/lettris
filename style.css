@@ -2,10 +2,6 @@
   box-sizing: border-box;
 }
 
-#start-button {
-  background-color: #32a899;
-}
-
 .grid-container {
   position: relative;
   display: flex;
@@ -19,8 +15,19 @@
 }
 
 .container-top, .container-bottom {
-  position:relative;
+  position: relative;
   display: flex;
+}
+
+#score {
+  margin: auto;
+  background-color: #ebf1f7;
+  text-align: center;
+}
+
+#start-button, #clear-button, #submit-button, #back-button {
+  background-color: #ebf1f7;
+  text-align: center;
 }
 
 #worddisplay {
@@ -28,44 +35,7 @@
   border: 1px solid;
 }
 
-#submit-button {
-  background-color: #c9c938;
-}
-
-#clear-button {
-  background-color: #9c2217;
-}
-
-@media screen and (min-width: 481px) and (orientation: portrait) {
-  #start-button {
-    margin: auto;
-    width: 20vw;
-  }
-
-  .grid-container {
-    margin: auto;
-    width: 60vw;
-    height: 96vw;
-  }
-
-  .grid-container div {
-    height: 6vw;
-    width: 6vw;
-    font-size: 4vw;
-  }
-
-  .container-top, .container-bottom {
-    margin: auto;
-    width: 60vw;
-  }
-}
-
 @media screen and (max-width: 480px) and (orientation: portrait) {
-  #start-button {
-    margin: auto;
-    width: 30vw;
-  }
-
   .grid-container {
     margin: auto;
     width: 90vw;
@@ -78,18 +48,28 @@
     font-size: 6vw;
   }
 
+  #worddisplay {
+    height: 9vw;
+    width: 54vw;
+  }
+
+  #start-button, #clear-button, #back-button, #submit-button {
+    height: 9vw;
+    width: 9vw;
+  }
+
   .container-top, .container-bottom {
     margin:auto;
     width: 90vw;
   }
+
+  #score {
+    width: 30vw;
+  }
+
 }
 
 @media screen and (orientation: landscape) {
-  #start-button {
-    margin: auto;
-    width: 20vh;
-  }
-
   .grid-container {
     margin: auto;
     width: 50vh;
@@ -102,8 +82,21 @@
     font-size: 3vh;
   }
 
+  #worddisplay {
+    width: 30vh;
+  }
+
+  #start-button, #clear-button, #back-button, #submit-button {
+    height: 5vh;
+    width: 5vh;
+  }
+
   .container-top, .container-bottom {
     margin: auto;
     width: 50vh;
+  }
+
+  #score {
+    width: 20vh;
   }
 }

@@ -3,23 +3,25 @@ document.addEventListener('DOMContentLoaded', () => {
   let Score = 0;
   let LetterBox = null;
   let GameOver = false;
-  const LetterBoxSize = 10;
   const NumRows = 16;
   const NumCols = 10;
+  const LetterBoxSize = NumCols;
   const WordDisplay = document.querySelector('#worddisplay');
   WordDisplay.innerText = '';
   const grid = document.querySelector('.grid-container');
   const startBtn = document.querySelector('#start-button');
   const submitBtn = document.querySelector('#submit-button');
   const clearBtn = document.querySelector('#clear-button');
+  const backBtn = document.querySelector('#back-button');
+  const ScoreDisplay = document.querySelector('#score');
   let timerid = null;
   let square_grid = new Array();
   let SquaresSelected = null;
   const consonants = "BCDFGHJKLMNPQRSTVWXYZ";
   const vowels = "AEIOU";
-  for (i = 0; i < 16 /*make this dynamic*/; i++) {
+  for (i = 0; i < NumRows; i++) {
     square_row = new Array();
-    for (j = 0; j < 10; j++) {
+    for (j = 0; j < NumCols; j++) {
       let square = document.createElement("div");
       square.addEventListener('click', squareClickAction);
       square.r = i;
@@ -71,11 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
     SquaresSelected.push(this);
     if (isValidWord(WordDisplay.innerText)) {
       submitBtn.style.backgroundColor = '#179c43';
-      submitBtn.innerText = Score.toString() + '+' + getWordPoints(WordDisplay.innerText.length).toString();
     }
     else {
-      submitBtn.style.backgroundColor = '#c9c938';
-      submitBtn.innerText = Score.toString() + '+0';
+      submitBtn.style.backgroundColor = '#ebf1f7';
     }
   }
 
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearInterval(timerid);
       LetterBox = null;
       alert("Game Over!!");
-      startBtn.innerText = 'Restart';
+      startBtn.innerText = '\u23EE';
     }
   }
 
@@ -186,9 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //- check settled letters for valid words
     //- swap letters, if requested by user
     //- pop vowels out of consonants after a settlement time threshold
-    //sq_idx = Math.floor(Math.random() * 160);
-    //square_array[sq_idx].style.border = "outset";
-    //square_array[sq_idx].innerText = alphabet[Math.floor(Math.random() * 26)];
   }
 
   function cleanGameState() {
@@ -204,8 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
     LetterBox = null;
     WordDisplay.innerText = '';
     Score = 0;
-    submitBtn.innerText = '0';
-    startBtn.innerText = 'Start/Pause';
+    ScoreDisplay.innerText = "Score: " + Score;
+    startBtn.innerText = '\u23EF';
   }
 
   startBtn.addEventListener('click', () => {
@@ -230,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let c = square.c;
 
     while (r > 0 && square_grid[r-1][c].innerText != '') {
-      console.log(square_grid[r-1][c].innerText + ',' + r);
+      //console.log(square_grid[r-1][c].innerText + ',' + r);
       if (square_grid[r-1][c].selected == true)
         dropUpperSquares(square_grid[r-1][c]);
       square_grid[r][c].innerText = square_grid[r-1][c].innerText;
@@ -263,8 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     SquaresSelected = null;
     WordDisplay.innerText = '';
-    submitBtn.style.backgroundColor = '#c9c938';
-    submitBtn.innerText = Score.toString();
+    submitBtn.style.backgroundColor = '#ebf1f7';
+    ScoreDisplay.innerText = "Score: " + Score;
   })
 
   clearBtn.addEventListener('click', () => {
@@ -286,7 +283,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   document.addEventListener('keyup', control)
 
-  function get_grid_shape() {
-    return [250, 400];
-  }
+  backBtn.addEventListener('click', () => {
+    if (SquaresSelected == null)
+      return;
+    square = SquaresSelected.pop();
+    if (square && square.selected) {
+      square.style.border = "outset";
+      let word = WordDisplay.innerText;
+      let newWord = '';
+      for (i = 0; i < word.length - 1; i++) {
+        newWord = newWord + word[i];
+      }
+      square.selected = false;
+      WordDisplay.innerText = newWord;
+      if (isValidWord(WordDisplay.innerText)) {
+        submitBtn.style.backgroundColor = '#179c43';
+      }
+      else {
+        submitBtn.style.backgroundColor = '#ebf1f7';
+      }
+    }
+  })
 })  
