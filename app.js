@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
       square.addEventListener('click', squareClickAction);
       square.r = i;
       square.c = j;
-      square.selected = false;
+      square.selected = -1;
+      square.letter = '';
       square_row.push(square);
       grid.appendChild(square);
     }
@@ -46,12 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function isSquareClickValid(square) {
-    if (square.innerText === '')
+    console.log(square.selected);
+    if (GameOver || square.selected >= 0 || square.letter === '')
       return false;
-    for (i = 0; i < LetterBoxSize; i++) {
-      if (square.r === LetterBox[i].posY && square.c === i)
-        return false;
-    }
     return true;
   }
 
@@ -61,16 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function squareClickAction(evt) {
     //console.log("Square clicked " + this.innerText + " (" + this.r + "," + this.c + ")");
-    if (GameOver || this.selected == true)
-      return;
     if (!isSquareClickValid(this))
       return;
-    this.selected = true;
     this.style.border = "inset";
     WordDisplay.innerText = WordDisplay.innerText + this.innerText;
     if (SquaresSelected == null)
       SquaresSelected = new Array();
-    SquaresSelected.push(this);
+    this.selected = SquaresSelected.push(this) - 1;
     if (isValidWord(WordDisplay.innerText)) {
       submitBtn.style.backgroundColor = '#179c43';
     }
@@ -93,19 +88,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (square.innerText === '') {
         if (pickVowel()) {
           let idx = Math.floor(Math.random() * vowels.length);
-          //console.log('vowels:' + idx.toString());
-          //LetterBoxRow.push(vowels[idx]);
-          //LetterBoxShape[i][j] = vowels[idx];//Math.floor(Math.random() * vowels.length)];
-          l = {letter: vowels[idx], posY: 0};
+          //l = {letter: vowels[idx], posY: 0};
+          square.letter = vowels[idx];
         }
         else {
           let idx = Math.floor(Math.random() * consonants.length);
           //console.log('consonants:' + idx.toString());
           //LetterBoxRow.push(consonants[idx]);
           //LetterBoxShape[i][j] = consonants[idx];//Math.floor(Math.random() * consonants.length)];
-          l = {letter: consonants[idx], posY: 0};
+          //l = {letter: consonants[idx], posY: 0};
+          square.letter = consonants[idx];
         }
-        LetterBox.push(l);
+        LetterBox.push(square);
       }
       else {
         GameOver = true;
@@ -125,9 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return true;
 
     for (i = 0; i < LetterBoxSize; i++) {
-      if (LetterBox[i].posY < 15) {
-        square = square_grid[LetterBox[i].posY+1][i];
-        if (square.innerText === '')
+      if (LetterBox[i].r < 15) {
+        square = square_grid[LetterBox[i].r+1][i];
+        if (square.letter === '')
           return false;
       }
     }
@@ -138,9 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (LetterBox == null)
       return;
     for (i = 0; i < LetterBoxSize; i++) {
-      square = square_grid[LetterBox[i].posY][i];
-      square.innerText = LetterBox[i].letter;
-      square.style.border = "outset";
+      square = LetterBox[i];
+      if (square.letter === '')
+        continue;
+      square.innerText = square.letter;
+      if (square.selected >= 0)
+        square.style.border = "inset";
+      else
+        square.style.border = "outset";
     }
   }
 
@@ -148,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (LetterBox == null)
       return;
     for (i = 0; i < LetterBoxSize; i++) {
-      square = square_grid[LetterBox[i].posY][i];
+      square = LetterBox[i];
       square.innerText = '';
       square.style.border = "none";
     }
@@ -158,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (r >= 15)
       return true;
 
-    if (square_grid[r+1][c].innerText === '')
+    if (square_grid[r+1][c].letter === '')
       return false;
 
     return true;
@@ -170,8 +169,17 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       eraseLetterBox();
       for (i = 0; i < LetterBoxSize; i++) {
-        if (!isLetterSettled(LetterBox[i].posY, i)) {
-          LetterBox[i].posY++;
+        if (!isLetterSettled(LetterBox[i].r, LetterBox[i].c)) {
+          let current_square = LetterBox[i];
+          let below_square = square_grid[LetterBox[i].r+1][LetterBox[i].c];
+          below_square.letter = current_square.letter;
+          current_square.letter = '';
+          if (current_square.selected >= 0) {
+            below_square.selected = current_square.selected;
+            current_square.selected = -1;
+            SquaresSelected[below_square.selected] = below_square;
+          }
+          LetterBox[i] = below_square;
         }
       }
     }
@@ -191,10 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function cleanGameState() {
     for (i = 0; i < square_grid.length; i++) {
       for (j = 0; j < square_grid[i].length; j++) {
+        square_grid[i][j].selected = -1;
+        square_grid[i][j].letter = '';
         square_grid[i][j].innerText = '';
         square_grid[i][j].style.border = 'none';
       }
     }
+    SquaresSelected = null;
     clearInterval(timerid);
     timerid = null;
     GameOver = false;
@@ -216,48 +227,44 @@ document.addEventListener('DOMContentLoaded', () => {
     } else
       timerid = setInterval(gameplay, 1000);
   })
+
   function isValidWord(word) {
     return WordList.includes(word);
   }
 
   function dropUpperSquares(square) {
-    if (square.selected == false)
+    if (square.selected == -1)
       return;
     let r = square.r;
     let c = square.c;
 
     while (r > 0 && square_grid[r-1][c].innerText != '') {
       //console.log(square_grid[r-1][c].innerText + ',' + r);
-      if (square_grid[r-1][c].selected == true)
+      if (square_grid[r-1][c].selected >= 0)
         dropUpperSquares(square_grid[r-1][c]);
+      square_grid[r][c].letter = square_grid[r-1][c].letter;
       square_grid[r][c].innerText = square_grid[r-1][c].innerText;
       square_grid[r][c].style.border = square_grid[r-1][c].style.border;
       r--;
     }
+    square_grid[r][c].letter = '';
     square_grid[r][c].innerText = '';
     square_grid[r][c].style.border = '';
-    square.selected = false;
+    square.selected = -1;
   }
 
 
   submitBtn.addEventListener('click', () => {
     if (SquaresSelected == null)
       return;
-    //for (i = 0; i < SquaresSelected.length; i++) {
-    //  console.log(SquaresSelected[i].innerText);
-    //  SquaresSelected[i].selected = false;
-    //}
-    if (isValidWord(WordDisplay.innerText)) {
-      for (i = 0; i < SquaresSelected.length; i++) {
-        dropUpperSquares(SquaresSelected[i]);
-      }
-      Score += getWordPoints(WordDisplay.innerText.length);
-    } else {
-      for (i = 0; i < SquaresSelected.length; i++) {
-        SquaresSelected[i].selected = false;
-        SquaresSelected[i].style.border = "outset";
-      }
+
+    if (!isValidWord(WordDisplay.innerText))
+      return;
+
+    for (i = 0; i < SquaresSelected.length; i++) {
+      dropUpperSquares(SquaresSelected[i]);
     }
+    Score += getWordPoints(WordDisplay.innerText.length);
     SquaresSelected = null;
     WordDisplay.innerText = '';
     submitBtn.style.backgroundColor = '#ebf1f7';
@@ -268,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (SquaresSelected == null)
       return;
     for (i = 0; i < SquaresSelected.length; i++) {
-      SquaresSelected[i].selected = false;
+      SquaresSelected[i].selected = -1;
       SquaresSelected[i].style.border = "outset";
     }
     SquaresSelected = null;
@@ -287,14 +294,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (SquaresSelected == null)
       return;
     square = SquaresSelected.pop();
-    if (square && square.selected) {
+    if (square && square.selected >= 0) {
       square.style.border = "outset";
+      square.selected = -1;
       let word = WordDisplay.innerText;
       let newWord = '';
       for (i = 0; i < word.length - 1; i++) {
         newWord = newWord + word[i];
       }
-      square.selected = false;
       WordDisplay.innerText = newWord;
       if (isValidWord(WordDisplay.innerText)) {
         submitBtn.style.backgroundColor = '#179c43';
