@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   WordDisplay.innerText = '';
   const grid = document.querySelector('.grid-container');
   const startBtn = document.querySelector('#start-button');
-  const clearBtn = document.querySelector('#clear-button');
   const backBtn = document.querySelector('#back-button');
   const ScoreDisplay = document.querySelector('#score');
   let timerid = null;
@@ -264,17 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
     WordDisplay.style.backgroundColor = '#8ee4af';
     WordDisplay.style.border = 'inset';
     ScoreDisplay.innerText = "Score: " + Score;
-  })
-
-  clearBtn.addEventListener('click', () => {
-    if (SquaresSelected == null)
-      return;
-    for (i = 0; i < SquaresSelected.length; i++) {
-      SquaresSelected[i].selected = -1;
-      SquaresSelected[i].style.border = "outset";
-    }
-    SquaresSelected = null;
-    WordDisplay.innerText = '';
   })
 
   //assign functions to keyCodes

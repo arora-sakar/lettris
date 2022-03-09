@@ -25,7 +25,7 @@
   text-align: center;
 }
 
-#start-button, #clear-button, #back-button {
+#start-button, #back-button {
   background-color: #41b3a3;
   text-align: center;
   border: outset;
@@ -46,6 +46,7 @@
   }
 
   .grid-container div {
+    padding-top: 0.5vw;
     border-radius: 2vw;
     height: 9vw;
     width: 9vw;
@@ -58,9 +59,9 @@
     font-size: 6vw;
   }
 
-  #start-button, #clear-button, #back-button {
+  #start-button, #back-button {
     height: 9vw;
-    width: 9vw;
+    width: 13.5vw;
     font-size: 6vw;
   }
 
@@ -116,9 +117,9 @@
     font-size: 3vh;
   }
 
-  #start-button, #clear-button, #back-button {
+  #start-button, #back-button {
     height: 5vh;
-    width: 5vh;
+    width: 7.5vh;
     font-size: 3vh;
   }
 
