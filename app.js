@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   WordDisplay.innerText = '';
   const grid = document.querySelector('.grid-container');
   const startBtn = document.querySelector('#start-button');
-  const submitBtn = document.querySelector('#submit-button');
   const clearBtn = document.querySelector('#clear-button');
   const backBtn = document.querySelector('#back-button');
   const ScoreDisplay = document.querySelector('#score');
@@ -48,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function isSquareClickValid(square) {
     console.log(square.selected);
-    if (GameOver || square.selected >= 0 || square.letter === '')
+    if (GameOver || square.selected >= 0 || square.letter === '' || timerid == null)
       return false;
     return true;
   }
@@ -67,10 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
       SquaresSelected = new Array();
     this.selected = SquaresSelected.push(this) - 1;
     if (isValidWord(WordDisplay.innerText)) {
-      submitBtn.style.backgroundColor = '#179c43';
+      WordDisplay.style.border = 'outset';
+      WordDisplay.style.backgroundColor = '#41b3a3';
     }
     else {
-      submitBtn.style.backgroundColor = '#ebf1f7';
+      WordDisplay.style.border = 'inset';
+      WordDisplay.style.backgroundColor = '#8ee4af';
     }
   }
 
@@ -110,11 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
       clearInterval(timerid);
       LetterBox = null;
       alert("Game Over!!");
-      startBtn.innerText = '\u23EE';
+      startBtn.innerText = '\u25B6';
     }
   }
 
-  function isletterBoxSettled() {
+  function isLetterBoxSettled() {
     if (LetterBox == null)
       return true;
 
@@ -136,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (square.letter === '')
         continue;
       square.innerText = square.letter;
+      square.style.backgroundColor = '#41b3a3';
       if (square.selected >= 0)
         square.style.border = "inset";
       else
@@ -150,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
       square = LetterBox[i];
       square.innerText = '';
       square.style.border = "none";
+      square.style.backgroundColor = '#5cdb95';
     }
   }
 
@@ -164,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function moveLetterBoxDown() {
-    if (isletterBoxSettled()) {
+    if (isLetterBoxSettled()) {
         createLetterBox();
     } else {
       eraseLetterBox();
@@ -203,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         square_grid[i][j].letter = '';
         square_grid[i][j].innerText = '';
         square_grid[i][j].style.border = 'none';
+        square_grid[i][j].style.backgroundColor = '#5cdb95';
       }
     }
     SquaresSelected = null;
@@ -213,19 +217,20 @@ document.addEventListener('DOMContentLoaded', () => {
     WordDisplay.innerText = '';
     Score = 0;
     ScoreDisplay.innerText = "Score: " + Score;
-    startBtn.innerText = '\u23EF';
+    startBtn.innerText = '\u25B6';
   }
 
   startBtn.addEventListener('click', () => {
     if (GameOver)
       cleanGameState();
-    if (LetterBox == null)
-      createLetterBox();
     if (timerid) {
       clearInterval(timerid);
       timerid = null;
-    } else
+      startBtn.innerText = '\u25B6';
+    } else {
       timerid = setInterval(gameplay, 1000);
+      startBtn.innerText = '\u2225';
+    }
   })
 
   function isValidWord(word) {
@@ -245,16 +250,17 @@ document.addEventListener('DOMContentLoaded', () => {
       square_grid[r][c].letter = square_grid[r-1][c].letter;
       square_grid[r][c].innerText = square_grid[r-1][c].innerText;
       square_grid[r][c].style.border = square_grid[r-1][c].style.border;
+      square_grid[r][c].style.backgroundColor = square_grid[r-1][c].style.backgroundColor;
       r--;
     }
     square_grid[r][c].letter = '';
     square_grid[r][c].innerText = '';
     square_grid[r][c].style.border = '';
+    square_grid[r][c].style.backgroundColor = '#5cdb95';
     square.selected = -1;
   }
 
-
-  submitBtn.addEventListener('click', () => {
+  WordDisplay.addEventListener('click', () => {
     if (SquaresSelected == null)
       return;
 
@@ -267,7 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
     Score += getWordPoints(WordDisplay.innerText.length);
     SquaresSelected = null;
     WordDisplay.innerText = '';
-    submitBtn.style.backgroundColor = '#ebf1f7';
+    WordDisplay.style.backgroundColor = '#8ee4af';
+    WordDisplay.style.border = 'inset';
     ScoreDisplay.innerText = "Score: " + Score;
   })
 
@@ -284,6 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //assign functions to keyCodes
   function control(e) {
+    if (timerid == null)
+      return;
     if (e.keyCode === 40) {
       moveLetterBoxDown();
     }
@@ -304,10 +313,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       WordDisplay.innerText = newWord;
       if (isValidWord(WordDisplay.innerText)) {
-        submitBtn.style.backgroundColor = '#179c43';
+        WordDisplay.style.border = 'outset';
+        WordDisplay.style.backgroundColor = '#41b3a3';
       }
       else {
-        submitBtn.style.backgroundColor = '#ebf1f7';
+        WordDisplay.style.border = 'inset';
+        WordDisplay.style.backgroundColor = '#8ee4af';
       }
     }
   })

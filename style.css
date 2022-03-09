@@ -7,7 +7,7 @@
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  background-color: #ebf1f7;
+  background-color: #5cdb95;
 }
 
 .grid-container div {
@@ -21,28 +21,32 @@
 
 #score {
   margin: auto;
-  background-color: #ebf1f7;
+  background-color: #5cdb95;
   text-align: center;
 }
 
-#start-button, #clear-button, #submit-button, #back-button {
-  background-color: #ebf1f7;
+#start-button, #clear-button, #back-button {
+  background-color: #41b3a3;
   text-align: center;
+  border: outset;
 }
 
 #worddisplay {
-  background-color: #ebf1f7;
-  border: 1px solid;
+  background-color: #8ee4af;
+  border: inset;
+  text-align: center;
 }
 
 @media screen and (max-width: 480px) and (orientation: portrait) {
   .grid-container {
+    border-radius: 2vw;
     margin: auto;
     width: 90vw;
     height: 144vw;
   }
 
   .grid-container div {
+    border-radius: 2vw;
     height: 9vw;
     width: 9vw;
     font-size: 6vw;
@@ -50,12 +54,28 @@
 
   #worddisplay {
     height: 9vw;
-    width: 54vw;
+    width: 63vw;
+    font-size: 6vw;
   }
 
-  #start-button, #clear-button, #back-button, #submit-button {
+  #start-button, #clear-button, #back-button {
     height: 9vw;
     width: 9vw;
+    font-size: 6vw;
+  }
+
+  #start-button {
+    height: 9.25vw;
+  }
+
+  #start-button {
+    border-top-left-radius: 2vw;
+    border-bottom-left-radius: 2vw;
+  }
+
+  #back-button {
+    border-top-right-radius: 2vw;
+    border-bottom-right-radius: 2vw;
   }
 
   .container-top, .container-bottom {
@@ -64,31 +84,52 @@
   }
 
   #score {
+    border-top-left-radius: 2vw;
+    border-top-right-radius: 2vw;
+    height: 9vw;
     width: 30vw;
+    font-size: 6vw;
   }
 
 }
 
 @media screen and (orientation: landscape) {
   .grid-container {
+    border-radius: 1vh;
     margin: auto;
     width: 50vh;
     height: 80vh;
   }
 
   .grid-container div {
+    padding-top: 0.5vh;
+    border-radius: 1vh;
     height: 5vh;
     width: 5vh;
     font-size: 3vh;
   }
 
   #worddisplay {
-    width: 30vh;
+    padding-top: 0.5vh;
+    width: 35vh;
+    height: 5vh;
+    font-size: 3vh;
   }
 
-  #start-button, #clear-button, #back-button, #submit-button {
+  #start-button, #clear-button, #back-button {
     height: 5vh;
     width: 5vh;
+    font-size: 3vh;
+  }
+
+  #start-button {
+    border-top-left-radius: 1vh;
+    border-bottom-left-radius: 1vh;
+  }
+
+  #back-button {
+    border-top-right-radius: 1vh;
+    border-bottom-right-radius: 1vh;
   }
 
   .container-top, .container-bottom {
@@ -97,6 +138,11 @@
   }
 
   #score {
+    padding-top: 1vh;
+    border-top-left-radius: 1vh;
+    border-top-right-radius: 1vh;
+    height: 5vh;
     width: 20vh;
+    font-size: 3vh;
   }
 }
