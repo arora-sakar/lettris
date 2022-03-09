@@ -16,8 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let timerid = null;
   let square_grid = new Array();
   let SquaresSelected = null;
-  const consonants = "BCDFGHJKLMNPQRSTVWXYZ";
-  const vowels = "AEIOU";
+  const WeightedLetters = "EEEEEEEEEEAAAAAAAARRRRRRRIIIIIIIOOOOOOOTTTTTTTNNNNNNNSSSSSSLLLLLCCCCCUUUUDDDPPPMMMHHHGGBBFFYYWKVXZJQ";
   for (i = 0; i < NumRows; i++) {
     square_row = new Array();
     for (j = 0; j < NumCols; j++) {
@@ -87,19 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
     for (i = 0; i < LetterBoxSize; i++) {
       square = square_grid[0][i];
       if (square.innerText === '') {
-        if (pickVowel()) {
-          let idx = Math.floor(Math.random() * vowels.length);
-          //l = {letter: vowels[idx], posY: 0};
-          square.letter = vowels[idx];
-        }
-        else {
-          let idx = Math.floor(Math.random() * consonants.length);
-          //console.log('consonants:' + idx.toString());
-          //LetterBoxRow.push(consonants[idx]);
-          //LetterBoxShape[i][j] = consonants[idx];//Math.floor(Math.random() * consonants.length)];
-          //l = {letter: consonants[idx], posY: 0};
-          square.letter = consonants[idx];
-        }
+        idx = Math.floor(Math.random() * WeightedLetters.length);
+        square.letter = WeightedLetters[idx];
         LetterBox.push(square);
       }
       else {
