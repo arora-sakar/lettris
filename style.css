@@ -19,8 +19,11 @@
   display: flex;
 }
 
+.container-top {
+  justify-content: flex-end;
+}
+
 #score {
-  margin: auto;
   background-color: #5cdb95;
   text-align: center;
 }
@@ -146,4 +149,8 @@
     width: 20vh;
     font-size: 3vh;
   }
+}
+
+.grid-container {
+  border-top-right-radius: 0px;
 }
