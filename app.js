@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  let WordList = null;
+  const WordList = new Array();
   let Score = 0;
   let LetterBox = null;
   let GameOver = false;
@@ -29,22 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
       grid.appendChild(square);
     }
     square_grid.push(square_row);
-    const url = "https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt"
+    const url = "/words3.txt";
     fetch(url)
        .then(response => response.text() )
        .then(data => {
-         WordList = new Array();
          let tmpList =  data.split("\n");
          for (i = 0; i < tmpList.length; i++) {
-           let word = tmpList[i].replace("\r","").toUpperCase();
-           if (word.length >= 3)
-            WordList.push(word);
+           WordList.push(tmpList[i].replace("\r", ""));
          }
         });
   }
 
   function isSquareClickValid(square) {
-    console.log(square.selected);
+    //console.log(square.selected);
     if (GameOver || square.selected >= 0 || square.letter === '' || timerid == null)
       return false;
     return true;
