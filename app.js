@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let square_grid = new Array();
   let SquaresSelected = null;
   const WeightedLetters = "EEEEEEEEEEAAAAAAAARRRRRRRIIIIIIIOOOOOOOTTTTTTTNNNNNNNSSSSSSLLLLLCCCCCUUUUDDDPPPMMMHHHGGBBFFYYWKVXZJQ";
+
   for (i = 0; i < NumRows; i++) {
     square_row = new Array();
     for (j = 0; j < NumCols; j++) {
@@ -29,16 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
       grid.appendChild(square);
     }
     square_grid.push(square_row);
-    const url = "/words3.txt";
-    fetch(url)
-       .then(response => response.text() )
-       .then(data => {
-         let tmpList =  data.split("\n");
-         for (i = 0; i < tmpList.length; i++) {
-           WordList.push(tmpList[i].replace("\r", ""));
-         }
-        });
   }
+
+  async function loadWords(url) {
+    const response = await fetch(url);
+    const data = await response.text();
+    let tmpList =  data.split("\n");
+    for (i = 0; i < tmpList.length; i++) {
+      WordList.push(tmpList[i].replace("\r", ""));
+    }
+  }
+
+  loadWords("/words3.txt");
 
   function isSquareClickValid(square) {
     //console.log(square.selected);
