@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isSquareClickValid(this))
       return;
     this.style.border = "inset";
+    this.style.backgroundColor = '#5cdb95';
     WordDisplay.innerText = WordDisplay.innerText + this.innerText;
     if (SquaresSelected == null)
       SquaresSelected = new Array();
@@ -124,11 +125,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (square.letter === '')
         continue;
       square.innerText = square.letter;
-      square.style.backgroundColor = '#41b3a3';
-      if (square.selected >= 0)
+
+      if (square.selected >= 0) {
         square.style.border = "inset";
-      else
+        square.style.backgroundColor = '#5cdb95';
+      }
+      else {
         square.style.border = "outset";
+        square.style.backgroundColor = '#41b3a3';
+      }
     }
   }
 
@@ -281,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     square = SquaresSelected.pop();
     if (square && square.selected >= 0) {
       square.style.border = "outset";
+      square.style.backgroundColor = '#41b3a3';
       square.selected = -1;
       let word = WordDisplay.innerText;
       let newWord = '';
