@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearInterval(timerid);
       LetterBox = null;
       alert("Game Over!!");
-      startBtn.innerText = '\u25B6';
+      startBtn.innerText = 'START';
     }
   }
 
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     WordDisplay.innerText = '';
     Score = 0;
     ScoreDisplay.innerText = "Score: " + Score;
-    startBtn.innerText = '\u25B6';
+    startBtn.innerText = 'START';
   }
 
   startBtn.addEventListener('click', () => {
@@ -210,10 +210,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (timerid) {
       clearInterval(timerid);
       timerid = null;
-      startBtn.innerText = '\u25B6';
+      startBtn.innerText = 'START';
     } else {
       timerid = setInterval(gameplay, 1000);
-      startBtn.innerText = '\u2225';
+      startBtn.innerText = 'PAUSE';
     }
   })
 

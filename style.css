@@ -40,7 +40,7 @@
   text-align: center;
 }
 
-@media screen and (max-width: 480px) and (orientation: portrait) {
+@media screen and (orientation: portrait) {
   .grid-container {
     border-radius: 2vw;
     margin: auto;
@@ -65,7 +65,7 @@
   #start-button, #back-button {
     height: 9vw;
     width: 13.5vw;
-    font-size: 6vw;
+    font-size: 3vw;
   }
 
   #start-button {
@@ -123,7 +123,7 @@
   #start-button, #back-button {
     height: 5vh;
     width: 7.5vh;
-    font-size: 3vh;
+    font-size: 1.7vh;
   }
 
   #start-button {
