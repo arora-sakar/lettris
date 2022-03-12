@@ -7,11 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const NumCols = 10;
   const LetterBoxSize = NumCols;
   const WordDisplay = document.querySelector('#worddisplay');
-  WordDisplay.innerText = '';
   const grid = document.querySelector('.grid-container');
   const startBtn = document.querySelector('#start-button');
   const backBtn = document.querySelector('#back-button');
-  const ScoreDisplay = document.querySelector('#score');
   let timerid = null;
   let square_grid = new Array();
   let SquaresSelected = null;
@@ -60,9 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     this.style.border = "inset";
     this.style.backgroundColor = '#5cdb95';
-    WordDisplay.innerText = WordDisplay.innerText + this.innerText;
-    if (SquaresSelected == null)
+    if (SquaresSelected == null) {
       SquaresSelected = new Array();
+      WordDisplay.innerText = '';
+    }
+    WordDisplay.innerText = WordDisplay.innerText + this.innerText;
     this.selected = SquaresSelected.push(this) - 1;
     if (isValidWord(WordDisplay.innerText)) {
       WordDisplay.style.border = 'outset';
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return true;
 
     for (i = 0; i < LetterBoxSize; i++) {
-      if (LetterBox[i].r < 15) {
+      if (LetterBox[i].r < (NumRows - 1)) {
         square = square_grid[LetterBox[i].r+1][i];
         if (square.letter === '')
           return false;
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function isLetterSettled(r, c) {
-    if (r >= 15)
+    if (r >= (NumRows - 1))
       return true;
 
     if (square_grid[r+1][c].letter === '')
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     LetterBox = null;
     WordDisplay.innerText = '';
     Score = 0;
-    ScoreDisplay.innerText = "Score: " + Score;
+    WordDisplay.innerText = "Score: " + Score;
     startBtn.innerText = 'START';
   }
 
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     WordDisplay.innerText = '';
     WordDisplay.style.backgroundColor = '#8ee4af';
     WordDisplay.style.border = 'inset';
-    ScoreDisplay.innerText = "Score: " + Score;
+    WordDisplay.innerText = "Score: " + Score;
   })
 
   //assign functions to keyCodes
