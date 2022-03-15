@@ -34,7 +34,7 @@
   border: outset;
 }
 
-#worddisplay {
+#display {
   background-color: #8ee4af;
   border: inset;
   text-align: center;
@@ -56,7 +56,7 @@
     font-size: 6vw;
   }
 
-  #worddisplay {
+  #display {
     height: 9vw;
     width: 63vw;
     font-size: 6vw;
@@ -65,7 +65,7 @@
   #start-button, #back-button {
     height: 9vw;
     width: 13.5vw;
-    font-size: 3vw;
+    font-size: 2.5vw;
   }
 
   #start-button {
@@ -94,7 +94,6 @@
     width: 30vw;
     font-size: 6vw;
   }
-
 }
 
 @media screen and (orientation: landscape) {
@@ -113,7 +112,7 @@
     font-size: 3vh;
   }
 
-  #worddisplay {
+  #display {
     padding-top: 0.5vh;
     width: 35vh;
     height: 5vh;
